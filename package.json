@@ -9,7 +9,6 @@
   "dependencies": {
     "bluebird": "^3.5.1",
     "express-validator": "^5.3.0",
-    "inflex-authentication": "file:./inflex/authentication",
     "lodash": "^4.17.4",
     "passport-facebook-token": "^3.3.0"
   },
@@ -45,5 +44,5 @@
     "watch-node": "nodemon --exec babel-node --presets env,stage-2 examples/simple-config.js",
     "build": "babel src -d build"
   },
-  "version": "0.0.0"
+  "version": "0.0.1"
 }

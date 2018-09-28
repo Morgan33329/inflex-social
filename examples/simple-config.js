@@ -1,10 +1,11 @@
 'use strict';
-import path from "path";
+
+var path = require("path");
 
 process.env.DEVELOPER = true;
 
-process.env.FB_ID = '617392058452372';
-process.env.FB_SECRET = '279dcb1466a206f8643221c3dfc5119c';
+process.env.FB_ID = 'xxx';
+process.env.FB_SECRET = 'xxx';
 var port = 3000;
 
 var { 
@@ -29,8 +30,8 @@ authConfig({
     mailTransport : {
         'service' : 'gmail',
         'auth' : {
-            'user' : 'dogolye@gmail.com',
-            'pass' : '19901128'
+            'user' : 'xxx',
+            'pass' : 'xxx'
         }
     }
 });
