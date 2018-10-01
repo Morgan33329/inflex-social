@@ -71,15 +71,6 @@ var ifNewUser = function (req, res, next) {
     next();
 }
 
-var hasToken = function(req, res, next) {
-    let tokenMiddle = authConfig('middleware.token');
-
-    if (tokenMiddle)
-        tokenMiddle(req, res);
-
-    next();
-}
-
 export default function (options, middleware) {
     settings = _.merge(defaultSettings, options || {});
 
@@ -137,8 +128,7 @@ export default function (options, middleware) {
 
         getProfileFromFacebook,
 
-        ifNewUser,
-        hasToken
+        ifNewUser
     );
 
     return ret;
