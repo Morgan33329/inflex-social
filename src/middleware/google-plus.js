@@ -1,13 +1,13 @@
 import _ from 'lodash';
 import passport from 'passport';
-import FacebookStrategy from 'passport-facebook-token';
+import GooglePlusTokenStrategy from 'passport-google-plus-token';
 import { createObject, successLoginInMiddleware } from 'inflex-authentication/helpers';
 
 import { getConfig } from '../config';
 import { repository, getId } from './../database';
 import user from './../services/user';
 
-const socialType = 1;
+const socialType = 2;
 
 const defaultSettings = {
     'invalidToken' : function(res, message) {
@@ -40,7 +40,7 @@ var validateAccessToken = function (req, res, next) {
 }
 
 var getProfileFromFacebook = function (req, res, next) {
-    passport.authenticate('facebook-token', function(err, user, info) {
+    passport.authenticate('google-plus-token', function(err, user, info) {
         if (err) {
             return settings.invalidToken(res, err.message);
         } else if (!user) {
@@ -48,10 +48,10 @@ var getProfileFromFacebook = function (req, res, next) {
         }
 
         req.social = {
-            'type' : 'facebook',
+            'type' : 'google-plus',
             'profile' : user.profile
         };
-
+        
         if (user.new)
             req.newRegistration = true;
 
@@ -64,18 +64,19 @@ var getProfileFromFacebook = function (req, res, next) {
 export default function (options, middleware) {
     settings = _.merge(defaultSettings, options || {});
 
-    let facebookConfig = getConfig('facebook');
+    let googlePlusConfig = getConfig('google-plus');
 
-    passport.use(new FacebookStrategy({
-        clientID: facebookConfig.clientId,
-        clientSecret: facebookConfig.clientSecret,
-    }, (accessToken, refreshToken, profile, done) => {
-        let facebookId = profile.id,
+    passport.use(new GooglePlusTokenStrategy({
+        clientID: googlePlusConfig.clientId,
+        clientSecret: googlePlusConfig.clientSecret,
+        passReqToCallback: true
+    }, function(req, accessToken, refreshToken, profile, done) {
+        let googlePlusId = profile.id,
         
             userService = new user();
 
         repository('social')
-            .findByIdAndType(facebookId, socialType)
+            .findByIdAndType(googlePlusId, socialType)
             .then(social => {
                 let hasSocial = function(identityId, socialId, newUser) {
                     createObject({
@@ -101,7 +102,7 @@ export default function (options, middleware) {
                     console.log("New social user");
 
                     userService
-                        .createWithSocial(facebookId, socialType)
+                        .createWithSocial(googlePlusId, socialType)
                         .then(data => {
                             hasSocial(getId(data.identity), getId(data.social), true);
                         });

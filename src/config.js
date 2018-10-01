@@ -2,8 +2,13 @@ import _ from 'lodash';
 
 const defaultSettings = {
     'facebook' : {
-        'client_id' : process.env.FB_ID || null,
-        'client_secret' : process.env.FB_SECRET || null
+        'clientId' : process.env.FACEBOOK_ID || null,
+        'clientSecret' : process.env.FACEBOOK_SECRET || null
+    },
+
+    'google-plus' : {
+        'clientId' : process.env.GOOGLEPLUS_ID || null,
+        'clientSecret' : process.env.GOOGLEPLUS_SECRET || null,
     }
 };
 var settings = defaultSettings;

@@ -1,8 +1,9 @@
 import passport from 'passport';
 
-import { facebookMiddleware } from './social';
+import { getConfig } from './config';
+import { middleware } from './social';
 
-var successFacebook = function(req, res) {
+var successLogin = function(req, res) {
     req
         .token()
         .generate(req.body.device)
@@ -26,9 +27,27 @@ var successFacebook = function(req, res) {
 export function facebookLogin (app, options) {
     options = options || {};
 
-    app.post(
-        '/api/login/facebook', 
-        facebookMiddleware(), 
-        options.action || successFacebook
-    );
+    let facebookConfig = getConfig('facebook');
+
+    if (facebookConfig.clientId) {
+        app.post(
+            '/api/login/facebook', 
+            middleware('facebook'), 
+            options.action || successLogin
+        );
+    }
+}
+
+export function googlePlusLogin (app, options) {
+    options = options || {};
+
+    let googlePlusConfig = getConfig('google-plus');
+
+    if (googlePlusConfig.clientId) {
+        app.post(
+            '/api/login/google-plus', 
+            middleware('google-plus'), 
+            options.action || successLogin
+        );
+    }
 }
