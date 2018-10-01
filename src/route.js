@@ -1,28 +1,7 @@
-import passport from 'passport';
+import { authConfig } from 'inflex-authentication';
 
 import { getConfig } from './config';
 import { middleware } from './social';
-
-var successLogin = function(req, res) {
-    req
-        .token()
-        .generate(req.body.device)
-        .then((ret) => {
-            ret.disable.exceptMe();
-
-            res.json({
-                "error" : false,
-                "response" : {
-                    "token" : ret.token
-                }
-            });
-        })
-        .catch(err => { 
-            console.log(err);
-
-            res.send("fail doJWTLogin");
-        });
-}
 
 export function facebookLogin (app, options) {
     options = options || {};
@@ -30,10 +9,16 @@ export function facebookLogin (app, options) {
     let facebookConfig = getConfig('facebook');
 
     if (facebookConfig.clientId) {
+        let middle = middleware('facebook');
+
         app.post(
             '/api/login/facebook', 
-            middleware('facebook'), 
-            options.action || successLogin
+            middle, 
+            (req, res, next) => {
+                let action = options.action || authConfig('actions.login');
+
+                action(req, res, next);
+            }
         );
     }
 }
@@ -44,10 +29,16 @@ export function googlePlusLogin (app, options) {
     let googlePlusConfig = getConfig('google-plus');
 
     if (googlePlusConfig.clientId) {
+        let middle = middleware('google-plus');
+
         app.post(
             '/api/login/google-plus', 
-            middleware('google-plus'), 
-            options.action || successLogin
+            middle, 
+            (req, res, next) => {
+                let action = options.action || authConfig('actions.login');
+
+                action(req, res, next);
+            }
         );
     }
 }
