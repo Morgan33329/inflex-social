@@ -63,10 +63,14 @@ var getProfileFromFacebook = function (req, res, next) {
 }
 
 var ifNewUser = function (req, res, next) {
-    if (req.newRegistration)
-        routeMiddleware('registration', settings.version)(req, res, next);
-    else
-        next();
+    if (req.newRegistration) {
+        let middleware = routeMiddleware('registration', settings.version);
+
+        if (middleware)
+            return middleware(req, res, next);
+    }
+
+    next();
 }
 
 var strategyAdded = false;
