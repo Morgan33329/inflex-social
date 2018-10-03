@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import passport from 'passport';
 import FacebookStrategy from 'passport-facebook-token';
-import { createObject, successLoginInMiddleware, routeMiddleware} from 'inflex-authentication/helpers';
+import { createObject, successLoginInMiddleware, routeMiddleware } from 'inflex-authentication/helpers';
 import { authConfig } from 'inflex-authentication';
 
 import { getConfig } from '../config';

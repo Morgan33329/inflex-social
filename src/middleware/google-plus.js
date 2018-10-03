@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import passport from 'passport';
 import GooglePlusTokenStrategy from 'passport-google-plus-token';
-import { createObject, successLoginInMiddleware } from 'inflex-authentication/helpers';
+import { createObject, successLoginInMiddleware, routeMiddleware } from 'inflex-authentication/helpers';
 import { authConfig } from 'inflex-authentication';
 
 import { getConfig } from '../config';
