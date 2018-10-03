@@ -63,16 +63,18 @@ var getProfileFromFacebook = function (req, res, next) {
 }
 
 var ifNewUser = function (req, res, next) {
-    let registerMiddle = authConfig('middleware.registration');
-
-    if (registerMiddle && req.newRegistration === true)
-        registerMiddle(req, res);
-
-    next();
+    if (req.newRegistration)
+        routeMiddleware('registration', settings.version)(req, res, next);
+    else
+        next();
 }
 
-export default function (options, middleware) {
-    settings = _.merge(defaultSettings, options || {});
+var strategyAdded = false;
+function addStrategy () {
+    if (strategyAdded)
+        return;
+
+    strategyAdded = true;
 
     let googlePlusConfig = getConfig('google-plus');
 
@@ -80,7 +82,7 @@ export default function (options, middleware) {
         clientID: googlePlusConfig.clientId,
         clientSecret: googlePlusConfig.clientSecret,
         passReqToCallback: true
-    }, function(req, accessToken, refreshToken, profile, done) {
+    }, (req, accessToken, refreshToken, profile, done) => {
         let googlePlusId = profile.id,
         
             userService = new user();
@@ -121,6 +123,12 @@ export default function (options, middleware) {
                 }
             });
     }));
+}
+
+export default function (options, middleware) {
+    settings = _.merge(defaultSettings, options || {});
+
+    addStrategy();
 
     var ret = middleware || [];
 

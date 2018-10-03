@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import passport from 'passport';
 import FacebookStrategy from 'passport-facebook-token';
-import { createObject, successLoginInMiddleware } from 'inflex-authentication/helpers';
+import { createObject, successLoginInMiddleware, routeMiddleware} from 'inflex-authentication/helpers';
 import { authConfig } from 'inflex-authentication';
 
 import { getConfig } from '../config';
@@ -63,16 +63,18 @@ var getProfileFromFacebook = function (req, res, next) {
 }
 
 var ifNewUser = function (req, res, next) {
-    let registerMiddle = authConfig('middleware.registration');
-
-    if (registerMiddle && req.newRegistration === true)
-        registerMiddle(req, res);
-
-    next();
+    if (req.newRegistration)
+        routeMiddleware('registration', settings.version)(req, res, next);
+    else
+        next();
 }
 
-export default function (options, middleware) {
-    settings = _.merge(defaultSettings, options || {});
+var strategyAdded = false;
+function addStrategy () {
+    if (strategyAdded)
+        return;
+
+    strategyAdded = true;
 
     let facebookConfig = getConfig('facebook');
 
@@ -120,6 +122,12 @@ export default function (options, middleware) {
                 }
             });
     }));
+}
+
+export default function (options, middleware) {
+    settings = _.merge(defaultSettings, options || {});
+
+    addStrategy();
 
     var ret = middleware || [];
 

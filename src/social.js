@@ -6,12 +6,18 @@ import {
     googlePlusLogin
 } from './route';
 
-export function socialRoutes (app, options) {
+export function socialRoutes (app, version, options) {
+    if (typeof version === 'object' && !options) {
+        options = version;
+        version = null;
+    }
+
+    version = version || '';
     options = options || {};
 
-    facebookLogin(app, options.facebook || {});
+    facebookLogin(app, options.facebook || {}, version);
 
-    googlePlusLogin(app, options.googlePlus || {});
+    googlePlusLogin(app, options.googlePlus || {}, version);
 }
 
 export function middleware (type, options, middlewares) {

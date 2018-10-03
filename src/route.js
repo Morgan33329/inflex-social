@@ -1,9 +1,9 @@
-import { authConfig } from 'inflex-authentication';
+import { routeAction } from 'inflex-authentication/helpers';
 
 import { getConfig } from './config';
 import { middleware } from './social';
 
-export function facebookLogin (app, options) {
+export function facebookLogin (app, options, version) {
     options = options || {};
 
     let facebookConfig = getConfig('facebook');
@@ -12,18 +12,16 @@ export function facebookLogin (app, options) {
         let middle = middleware('facebook');
 
         app.post(
-            '/api/login/facebook', 
+            (version ? '/' + version : '') + '/api/login/facebook', 
             middle, 
             (req, res, next) => {
-                let action = options.action || authConfig('actions.login');
-
-                action(req, res, next);
+                routeAction('login', version, options.action)(req, res, next);
             }
         );
     }
 }
 
-export function googlePlusLogin (app, options) {
+export function googlePlusLogin (app, options, version) {
     options = options || {};
 
     let googlePlusConfig = getConfig('google-plus');
@@ -32,12 +30,10 @@ export function googlePlusLogin (app, options) {
         let middle = middleware('google-plus');
 
         app.post(
-            '/api/login/google-plus', 
+            (version ? '/' + version : '') + '/api/login/google-plus', 
             middle, 
             (req, res, next) => {
-                let action = options.action || authConfig('actions.login');
-
-                action(req, res, next);
+                routeAction('login', version, options.action)(req, res, next);
             }
         );
     }
