@@ -9,7 +9,7 @@ export function facebookLogin (app, options, version) {
     let facebookConfig = getConfig('facebook');
 
     if (facebookConfig.clientId) {
-        let middle = middleware('facebook', { 'version' : version });
+        let middle = middleware('facebook', { 'version' : version }, options.middleware);
 
         app.post(
             (version ? '/' + version : '') + '/api/login/facebook', 
@@ -27,7 +27,7 @@ export function googlePlusLogin (app, options, version) {
     let googlePlusConfig = getConfig('google-plus');
 
     if (googlePlusConfig.clientId) {
-        let middle = middleware('google-plus', { 'version' : version });
+        let middle = middleware('google-plus', { 'version' : version }, options.middleware);
 
         app.post(
             (version ? '/' + version : '') + '/api/login/google-plus', 

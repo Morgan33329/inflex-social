@@ -1,7 +1,7 @@
 {
   "main": "./social.js",
   "name": "inflex-social",
-  "version": "0.0.33",
+  "version": "0.0.31",
   "author": {
     "name": "Morgan",
     "email": "morgan92333@gmail.com",
