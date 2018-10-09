@@ -1,9 +1,11 @@
-import facebook from "./middleware/facebook";
-import googlePlus from "./middleware/google-plus";
+import facebook from './middleware/facebook';
+import googlePlus from './middleware/google-plus';
+import google from './middleware/google';
 
 import {
     facebookLogin,
-    googlePlusLogin
+    googlePlusLogin,
+    googleLogin
 } from './route';
 
 export function socialRoutes (app, version, options) {
@@ -18,13 +20,17 @@ export function socialRoutes (app, version, options) {
     facebookLogin(app, options.facebook || {}, version);
 
     googlePlusLogin(app, options.googlePlus || {}, version);
+
+    googleLogin(app, options.googlePlus || {}, version);
 }
 
-export function middleware (type, options, middlewares) {
+export function middleware (type, options, middleware) {
     switch (type) {
         case 'facebook':
-            return facebook(options, middlewares);
+            return facebook(options, middleware);
         case 'google-plus':
-            return googlePlus(options, middlewares);
+            return googlePlus(options, middleware);
+        case 'google':
+            return google(options, middleware);
     }
 }

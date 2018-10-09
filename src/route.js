@@ -22,6 +22,8 @@ export function facebookLogin (app, options, version) {
 }
 
 export function googlePlusLogin (app, options, version) {
+    return;
+    
     options = options || {};
 
     let googlePlusConfig = getConfig('google-plus');
@@ -31,6 +33,24 @@ export function googlePlusLogin (app, options, version) {
 
         app.post(
             (version ? '/' + version : '') + '/api/login/google-plus', 
+            middle, 
+            (req, res, next) => {
+                routeAction('login', version, options.action)(req, res, next);
+            }
+        );
+    }
+}
+
+export function googleLogin (app, options, version) {
+    options = options || {};
+
+    let googleConfig = getConfig('google');
+
+    if (googleConfig.clientId) {
+        let middle = middleware('google', { 'version' : version }, options.middleware);
+        console.log(googleConfig);
+        app.post(
+            (version ? '/' + version : '') + '/api/login/google', 
             middle, 
             (req, res, next) => {
                 routeAction('login', version, options.action)(req, res, next);

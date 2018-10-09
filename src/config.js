@@ -9,6 +9,11 @@ const defaultSettings = {
     'google-plus' : {
         'clientId' : process.env.GOOGLEPLUS_ID || null,
         'clientSecret' : process.env.GOOGLEPLUS_SECRET || null,
+    },
+
+    'google' : {
+        'clientId' : process.env.GOOGLE_ID || null,
+        'clientSecret' : process.env.GOOGLE_SECRET || null,
     }
 };
 var settings = defaultSettings;

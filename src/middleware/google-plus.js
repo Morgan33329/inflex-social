@@ -13,21 +13,25 @@ const socialType = 2;
 const defaultSettings = {
     'invalidToken' : function(res, message) {
         return res.status(422).json({ 
-            'error' : true,
-            "code" : '4220402',
-            "type" : '',
-            "title" : 'Invalid access token',
-            "detail" : message || 'Invalid access token'
+            'success' : false,
+            'error' : {
+                "code" : '4220402',
+                "type" : '',
+                "title" : 'Invalid access token',
+                "detail" : message || 'Invalid access token'
+            }
         });
     },
 
     'invalidRequest' : function(req, res) {
         return res.status(422).json({ 
-            'error' : true,
-            "code" : '4220401',
-            "type" : '',
-            "title" : 'Missing access token',
-            "detail" : 'Missing "access_token" parameter'
+            'success' : false,
+            'error' : {
+                "code" : '4220401',
+                "type" : '',
+                "title" : 'Missing access token',
+                "detail" : 'Missing "access_token" parameter'
+            }
         });
     }
 };
