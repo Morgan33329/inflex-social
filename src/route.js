@@ -23,7 +23,7 @@ export function facebookLogin (app, options, version) {
 
 export function googlePlusLogin (app, options, version) {
     return;
-    
+
     options = options || {};
 
     let googlePlusConfig = getConfig('google-plus');
@@ -48,7 +48,7 @@ export function googleLogin (app, options, version) {
 
     if (googleConfig.clientId) {
         let middle = middleware('google', { 'version' : version }, options.middleware);
-        console.log(googleConfig);
+
         app.post(
             (version ? '/' + version : '') + '/api/login/google', 
             middle, 
