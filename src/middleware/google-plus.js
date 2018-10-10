@@ -37,10 +37,18 @@ const defaultSettings = {
 };
 var settings = defaultSettings;
 
+function log (data) {
+    let l = authConfig('log');
+
+    l(data);
+}
+
 var validateAccessToken = function (req, res, next) {
-    if (req.body.access_token && typeof req.body.access_token == 'string')
+    if (req.body.access_token && typeof req.body.access_token == 'string') {
+        log('Try to login with google-plus');
+
         next();
-    else
+    } else
         settings.invalidRequest(req, res);
 }
 
@@ -94,6 +102,8 @@ function addStrategy () {
         let googlePlusId = profile.id,
         
             userService = new user();
+        
+        log('Get profile success');
 
         repository('social')
             .findByIdAndType(googlePlusId, socialType)
@@ -119,7 +129,7 @@ function addStrategy () {
                 }
 
                 if (!social) {
-                    console.log("New social user");
+                    log("New google-plus user");
 
                     userService
                         .createWithSocial(googlePlusId, socialType)

@@ -1,7 +1,14 @@
 import _ from 'lodash';
 import Bluebird from 'bluebird';
+import { authConfig } from 'inflex-authentication';
 
 import { repository, getId } from './../database';
+
+function log (data) {
+    let l = authConfig('log');
+
+    l(data);
+}
 
 function createIdentity() {
     return repository('identity')
@@ -11,7 +18,7 @@ function createIdentity() {
             'blocked' : false
         })
         .then(identity => {
-            console.log('Identity uploaded');
+            log('Identity uploaded');
 
             return identity;
         });
@@ -26,7 +33,7 @@ function createSocial(identityId, id, type) {
             'social_id' : id
         })
         .then(social => {
-            console.log('Social uploaded');
+            log('Social uploaded');
 
             return social;
         });
@@ -45,7 +52,7 @@ export default class {
                     });
             })
             .catch(err => {
-                console.log(err);
+                log(err);
             });
     }
 }
