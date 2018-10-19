@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import passport from 'passport';
 import FacebookStrategy from 'passport-facebook-token';
-import { createObject, successLoginInMiddleware, routeMiddleware } from 'inflex-authentication/helpers';
+import { createObject, successLoginInMiddleware, routeMiddleware, defineSettings, settingsByUrl } from 'inflex-authentication/helpers';
 import { authConfig } from 'inflex-authentication';
 
 import { getConfig } from '../config';
@@ -35,7 +35,7 @@ const defaultSettings = {
         });
     }
 };
-var settings = defaultSettings;
+var versionSettings = {};
 
 function log (data) {
     let l = authConfig('log');
@@ -48,11 +48,16 @@ var validateAccessToken = function (req, res, next) {
         log('Try to login with facebook');
 
         next();
-    } else
+    } else {
+        let settings = settingsByUrl(req, versionSettings);
+
         settings.invalidRequest(req, res);
+    }
 }
 
 var getProfileFromFacebook = function (req, res, next) {
+    let settings = settingsByUrl(req, versionSettings);
+
     passport.authenticate('facebook-token', function(err, user, info) {
         if (err) {
             return settings.invalidToken(res, err.message);
@@ -76,7 +81,7 @@ var getProfileFromFacebook = function (req, res, next) {
 
 var ifNewUser = function (req, res, next) {
     if (req.newRegistration) {
-        let middleware = routeMiddleware('registration', settings.version);
+        let middleware = routeMiddleware('registration', req);
 
         if (middleware)
             return middleware(req, res, next);
@@ -98,7 +103,9 @@ function addStrategy () {
         fbGraphVersion : 'v3.1',
         clientID: facebookConfig.clientId,
         clientSecret: facebookConfig.clientSecret,
-    }, (accessToken, refreshToken, profile, done) => {
+        
+        passReqToCallback: true
+    }, (req, accessToken, refreshToken, profile, done) => {
         let facebookId = profile.id,
         
             userService = new user();
@@ -144,7 +151,10 @@ function addStrategy () {
 }
 
 export default function (options, middleware) {
-    settings = _.merge(defaultSettings, options || {});
+    let version = options && options.version || 'default';
+
+    middleware = middleware || [];
+    versionSettings = defineSettings(version, options, versionSettings, defaultSettings);
 
     addStrategy();
 

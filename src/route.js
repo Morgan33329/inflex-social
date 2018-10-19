@@ -15,7 +15,7 @@ export function facebookLogin (app, options, version) {
             (version ? '/' + version : '') + '/api/login/facebook', 
             middle, 
             (req, res, next) => {
-                routeAction('login', version, options.action)(req, res, next);
+                routeAction('login', req, options.action)(req, res, next);
             }
         );
     }
@@ -35,7 +35,7 @@ export function googlePlusLogin (app, options, version) {
             (version ? '/' + version : '') + '/api/login/google-plus', 
             middle, 
             (req, res, next) => {
-                routeAction('login', version, options.action)(req, res, next);
+                routeAction('login', req, options.action)(req, res, next);
             }
         );
     }
@@ -53,7 +53,7 @@ export function googleLogin (app, options, version) {
             (version ? '/' + version : '') + '/api/login/google', 
             middle, 
             (req, res, next) => {
-                routeAction('login', version, options.action)(req, res, next);
+                routeAction('login', req, options.action)(req, res, next);
             }
         );
     }
