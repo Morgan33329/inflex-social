@@ -1,5 +1,5 @@
-import identityRepository from './mongo/identity';
-import socialRepository from './mongo/social';
+import identityRepository from './mongoose/identity';
+import socialRepository from './mongoose/social';
 
 export default function (type) {
     switch (type) {
